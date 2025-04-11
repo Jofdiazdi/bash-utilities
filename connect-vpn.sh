@@ -1,6 +1,6 @@
-
 #!/bin/bash
-
+source ./utils.sh
+check_dependencies openconnect pass
 CONFIG_FILE="$HOME/Documents/Configs/vpnhosts.conf"
 VPN_KEYS=()
 
