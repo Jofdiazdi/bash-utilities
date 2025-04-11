@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-CONFIG_FILE="vpnhosts.conf"
+CONFIG_FILE="$HOME/Documents/Configs/vpnhosts.conf"
 VPN_KEYS=()
 
 # Load config keys
@@ -40,14 +40,15 @@ if [ -z "$VPN_PASS" ]; then
 fi
 
 # Connect
-echo '$VPN_PASS' | sudo exec openconnect \
-  --protocol=fortinet \
-  --servercert='$VPN_CERT' \
-  --user='$VPN_USER' \
+echo "$VPN_PASS" | sudo openconnect --protocol=fortinet \
+  --servercert="$VPN_CERT" \
+  --user="$VPN_USER" \
   --passwd-on-stdin \
-  '$VPN_SERVER' &
+  "$VPN_SERVER" &
 VPN_PID=$!
 
 trap 'echo "Disconnecting..."; sudo kill $VPN_PID; exit' INT
+
+wait $VPN_PIDtrap 'echo "Disconnecting..."; sudo kill $VPN_PID; exit' INT
 
 wait $VPN_PID
