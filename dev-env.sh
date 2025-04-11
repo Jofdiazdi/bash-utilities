@@ -1,16 +1,18 @@
 #!/bin/bash
-DEV_FOLDER="$HOME/Documents/Projects"
+source ./utils.sh
+check_dependencies tmux nvim lazygit fzf sed find
+
+DEV_FOLDER="$HOME/Documents"
 # Check if the development folder exists
 if [ ! -d "$DEV_FOLDER" ]; then
-    echo "Development folder not found: ${DEV_FOLDER}"
+    echo "Projects folder not found: ${DEV_FOLDER}"
     exit 1
 fi
 
 # List directories inside the development folder
 mapfile -t PROJECTS < <(
-    find "$DEV_FOLDER" -type d -mindepth 2 -maxdepth 4 \
-    -exec sh -c 'ls -p "{}" | grep -qv "/"' \; -print \
-    | sed "s|$DEV_FOLDER/||"
+    find "$DEV_FOLDER" -mindepth 2 -maxdepth 8 -type d -name ".git" \
+    | sed "s|/\.git||" | sed "s|$DEV_FOLDER/||"
 )
 # Check if there are any projects
 if [ ${#PROJECTS[@]} -eq 0 ]; then
@@ -60,15 +62,15 @@ else
     echo "Creating new tmux session: $SESH"
     tmux new-session -d -s $SESH -n "editor"
 
-    tmux send-keys -t $SESH:editor "cd ~/Documents/Development/${PROJECT_FULL_PATH}" C-m
+    tmux send-keys -t $SESH:editor "cd ${DEV_FOLDER}/${PROJECT_FULL_PATH}" C-m
     tmux send-keys -t $SESH:editor "nvim ." C-m
 
     tmux new-window -t $SESH -n "lazygit"
-    tmux send-keys -t $SESH:lazygit "cd ~/Documents/Development/${PROJECT_FULL_PATH}" C-m
+    tmux send-keys -t $SESH:lazygit "cd ${DEV_FOLDER}/${PROJECT_FULL_PATH}" C-m
     tmux send-keys -t $SESH:lazygit "lazygit" C-m
 
     tmux new-window -t $SESH -n "terminal"
-    tmux send-keys -t $SESH:terminal "cd ~/Documents/Development/${PROJECT_FULL_PATH}" C-m
+    tmux send-keys -t $SESH:terminal "cd ${DEV_FOLDER}/${PROJECT_FULL_PATH}" C-m
     
     tmux select-window -t $SESH:editor
 
