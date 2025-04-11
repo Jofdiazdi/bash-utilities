@@ -1,5 +1,5 @@
 #!/bin/bash
-DEV_FOLDER="$HOME/Documents/Development"
+DEV_FOLDER="$HOME/Documents/Projects"
 # Check if the development folder exists
 if [ ! -d "$DEV_FOLDER" ]; then
     echo "Development folder not found: ${DEV_FOLDER}"
