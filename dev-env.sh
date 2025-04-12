@@ -50,8 +50,11 @@ if [ -z "$PROJECT_FULL_PATH" ]; then
     exit 1
 fi
 
-SESH=$(echo "${PROJECT_FULL_PATH}" | tr '/' '_')
 
+
+PARENT=$(basename "$(dirname "$PROJECT_FULL_PATH")")
+CHILD=$(basename "$PROJECT_FULL_PATH")
+SESH="${PARENT}/${CHILD}"
 
 # Check if the tmux session exists
 tmux has-session -t "$SESH" 2>/dev/null
